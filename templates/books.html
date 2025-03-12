@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Список всех заказов:</h1>
+
+    {% for book in books %}
+    <div class="book-info">
+        <h3>{{ book.title }}</h3>
+        <h4>{{ book.author }}</h4>
+        <img src="{% static book.img %}"> 
+    </div>
+    {% endfor %}
+
+</body>
+</html>
