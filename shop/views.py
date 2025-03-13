@@ -7,12 +7,6 @@ class HomePageView(TemplateView):
     template_name = 'home.html'
 
 
-class CustomersListView(ListView):
-    template_name = "customer.html"
-    model = Customer
-    context_object_name = "list_of_all_customers"
-
-
 class OrdersListView(ListView):
     template_name = "orders.html"
     model = Order
