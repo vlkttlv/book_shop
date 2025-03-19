@@ -4,18 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Книги</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
-    <h1>Список всех заказов:</h1>
-
-    {% for book in books %}
-    <div class="book-info">
-        <h3>{{ book.title }}</h3>
-        <h4>{{ book.author }}</h4>
-        <img src="{% static book.img %}"> 
-    </div>
-    {% endfor %}
-
+    <h1>Книги</h1>
+    <table>
+        <tr>
+            <th>Номер заказа</th>
+            <th>Изображение</th>
+            <th>Книга</th>
+            <th>Автор</th>
+            <th>Стоимость</th>
+        </tr>
+        {% for book in list_of_all_books %}
+        <tr>
+            <td>
+                <a href="{% url 'book_detail' book.id %}">{{book.id}}</a>
+            </td>
+            <td><img src="{{ book.img.url }}" alt="{{ book.id }}"></td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

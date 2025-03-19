@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книга</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <h1 class="book-style">{{ book.title }}</h1>
+    <h2 class="book-style">{{ book.author }}</h2>
+    <img src="{{ book.img }}" alt="{{ book.title }}">
+    <h3 >Цена: {{ book.price }}</h3>
+    </table>
+</body>
+</html>
