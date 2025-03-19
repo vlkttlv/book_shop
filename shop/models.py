@@ -207,6 +207,7 @@ class Order(models.Model):
     order_status = models.CharField("Статус заказа", max_length=20)
     payment_method = models.CharField("Способ оплаты", max_length=20)
     is_delivered = models.BooleanField("Доставлен?", default=False)
+    address = models.CharField("Адрес доставки", max_length=255)
 
     def __str__(self):
         return f"Заказ: {self.id} (ID покупателя {self.customer.id})"
