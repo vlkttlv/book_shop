@@ -23,7 +23,7 @@
             <td>{{ customer.email }}</td>
             <td>{{ customer.first_name }}</td>
             <td>{{ customer.last_name }}</td>
-            <td>{{ customer.created_at }}</td>
+            <td>{{ customer.created_at|date:"d-m-Y" }}</td>
         </tr>
         {% endfor %}
     </table>
