@@ -11,19 +11,19 @@
     <h1 class="book-style">Книги</h1>
     <table>
         <tr>
-            <th>Изображение</th>
-            <th>Книга</th>
-            <th>Автор</th>
-            <th>Стоимость</th>
+            <th>     </th>
+            <th class="book-style">Книга</th>
+            <th class="book-style">Автор</th>
+            <th class="book-style">Стоимость</th>
         </tr>
         {% for book in list_of_all_books %}
         <tr>
-            <td><img src="{{ book.img.url }}" alt="{{ book.id }}"></td>
-            <td>
+            <td class="book-style"><img src="{{ book.img.url }}" alt="{{ book.id }}" height="200px"></td>
+            <td class="book-style">
                 <a href="{% url 'book_detail' book.id %}">{{book.title}}</a>
             </td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.price }}</td>
+            <td class="book-style">{{ book.author }}</td>
+            <td class="book-style">{{ book.price }}</td>
         </tr>
         {% endfor %}
     </table>

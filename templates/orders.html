@@ -7,7 +7,7 @@
     <title>Заказы пользователя</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
-<body>
+<body class="book-style">
     <h1>Список всех заказов:</h1>
     <table>
         <tr>
@@ -20,7 +20,7 @@
         {% for order in list_of_all_orders %}
         <tr>
             <td>
-                <a href="{% url 'order_detail' order.order_id %}">{{order.id}}</a>
+                <a href="{% url 'order_detail' order.id %}">{{order.id}}</a>
             </td>
             <td>{{ order.customer }}</td>
             <td>{{ order.address }}</td>

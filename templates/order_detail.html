@@ -7,24 +7,24 @@
     <title>Состав заказа</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
-<body>
-    <h1>Заказ №{{ order.order_id }}</h1>
+<body class="book-style">
+    <h1>Заказ №{{ order.id }}</h1>
     <table class="order-info">
         <tr>
             <th>Номер заказа:</th>
-            <td>{{ order.order_id }}</td>
+            <td>{{ order.id }}</td>
         </tr>
         <tr>
             <th>Дата заказа:</th>
-            <td>{{ order.order_date }}</td>
+            <td>{{ order.order_date|date:"d-m-Y" }}</td>
         </tr>
         <tr>
             <th>Статус:</th>
-            <td>{{ order.status }}</td>
+            <td>{{ order.order_status }}</td>
         </tr>
         <tr>
             <th>Цена заказа:</th>
-            <td>{{ order.price }}</td>
+            <td>{{ order.total_cost }}</td>
         </tr>
         <tr>
             <th>Покупатель:</th>
@@ -32,31 +32,29 @@
         </tr>
         <tr>
             <th>Дата создания:</th>
-            <td>{{ order.created_at }}</td>
+            <td>{{ order.order_date|date:"d-m-Y" }}</td>
         </tr>
         <tr>
             <th>Дата последнего обновления:</th>
-            <td>{{ order.updated_at }}</td>
+            <td>{{ order.updated_at|date:"d-m-Y" }}</td>
         </tr>
     </table>
     <h1>Товары в заказе</h1>
     <table>
         <tr>
-            <th>Номер позиции заказа</th>
-            <th>Цена</th>
+            <th>  </th>
+            <th>Книга</th>
+            <th>Цена за 1 шт.</th>
             <th>Количество</th>
-            <th>Товар</th>
-            <th>Дата создания</th>
-            <th>Дата последнего обновления</th>
+            <th>Итоговая стоимость</th>
         </tr>
-        {% for order_item in order.order_items.all %}
+        {% for order_item in order.items.all %}
         <tr>
-            <td>{{ order_item.order_item_id }}</td>
+            <td ><img src="{{ order_item.product.img.url }}" alt="{{ order_item.product.id }}" height="200px"></td>
+            <td>{{ order_item.product.title }} - {{ order_item.product.author }}</td>
             <td>{{ order_item.price }}</td>
             <td>{{ order_item.quantity }}</td>
-            <td>{{ order_item.product }}</td>
-            <td>{{ order_item.created_at }}</td>
-            <td>{{ order_item.updated_at }}</td>
+            <td>{{ order_item.get_cost }}</td>
         </tr>
         {% endfor %}
     </table>
