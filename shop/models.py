@@ -165,7 +165,7 @@ class Book(models.Model):
 
     type_of_bunding = models.CharField("Тип переплета", max_length=64, choices=BUNDING_CHOICES)
     stock_quantity = models.PositiveIntegerField("Количество на складе", default=0)
-    img = models.ImageField("Изображение", upload_to="shop\static\img")
+    img = models.ImageField("Изображение", upload_to='img/')
 
     def __str__(self):
         return f'Книга {self.title} {self.author} (ID {self.id})'
@@ -203,14 +203,31 @@ class Order(models.Model):
     id = models.AutoField("ID", primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order_date = models.DateTimeField("Дата создания заказа", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата обновления заказа", auto_now=True)
     total_cost = models.DecimalField("Стоимость заказа", max_digits=10, decimal_places=2)
-    order_status = models.CharField("Статус заказа", max_length=20)
+    order_status = models.BooleanField(default=False)
     payment_method = models.CharField("Способ оплаты", max_length=20)
     is_delivered = models.BooleanField("Доставлен?", default=False)
     address = models.CharField("Адрес доставки", max_length=255)
 
     def __str__(self):
         return f"Заказ: {self.id} (ID покупателя {self.customer.id})"
+    
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.items.all())
+
+class OrderItem(models.Model):
+    id = models.AutoField("ID", primary_key=True)
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Book, related_name='order_items', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_cost(self):
+        return self.price * self.quantity
 
 
 class CartItem(models.Model):
@@ -224,3 +241,10 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"Товар: {self.book.title}, {self.quantity} штук)"
+
+
+
+
+
+
+
