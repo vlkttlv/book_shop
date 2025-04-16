@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.db.models import Q
 from shop.models import Customer, Order, Book
 
 
@@ -36,3 +37,36 @@ class BookDetailView(DetailView):
     template_name = "book_detail.html"
     model = Book
     context_object_name = "book"
+
+
+class SearchView(ListView):
+    template_name = "search.html"
+    model = Order
+    context_object_name = "list_of_all_orders"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Order.objects.filter(
+            Q(customer__first_name__icontains=query) |
+            Q(customer__last_name__icontains=query)
+        ).order_by('order_date').reverse()
+    
+
+class BooksSearchView(ListView):
+    template_name = "search_books.html"
+    model = Book
+    context_object_name = "list_of_all_books"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query)
+        ).order_by('title')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')
+        context['search_query'] = query
+        return context

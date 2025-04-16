@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
-    <form action="{% url 'search_books' %}" method="GET"> 
-        <input name="q" type="text" placeholder="Введите название книги или автора..."> 
-    </form> 
-    <h1 class="book-style">Книги</h1>
+    <h1 class="book-style">Найденые книги:</h1>
+    {% if search_query %}
+    <h2>Вы искали: "{{ search_query }}"</h2>
+    {% endif %}
+
+    {% if list_of_all_books %}
     <table>
         <tr>
             <th>     </th>
@@ -30,5 +32,8 @@
         </tr>
         {% endfor %}
     </table>
+    {% else %}
+    <h2>Упс, ничего не найдено...</h2>
+    {% endif %}
 </body>
 </html>
