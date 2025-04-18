@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 class AuthGroup(models.Model):
@@ -117,7 +118,7 @@ class DjangoSession(models.Model):
 
 ########################### MY MODELS ######################################
 
-class Customer(models.Model):
+class Customer(AbstractUser):
     """Модель пользователя"""
     id = models.AutoField("ID", primary_key=True, unique=True)
     email = models.EmailField("E-mail", max_length=256)
