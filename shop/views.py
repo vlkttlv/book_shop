@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
-from shop.models import Customer, Order, Book
+from shop.models import Customer, Order, Book, Star
 
 
 class HomePageView(TemplateView):
@@ -39,6 +39,11 @@ class BookDetailView(DetailView):
     context_object_name = "book"
 
     
+class StarsView(ListView):
+    template_name = "stars.html"
+    model = Star
+    context_object_name = "stars"
+
 
 class BooksSearchView(ListView):
     template_name = "search_books.html"

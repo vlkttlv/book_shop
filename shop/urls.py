@@ -7,7 +7,7 @@ from .views import (BooksSearchView,
                     OrdersListView,
                     OrderDetailView,
                     BookDetailView,
-                    BooksListView,)
+                    BooksListView, StarsView,)
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('books', BooksListView.as_view(), name='books'),
     path('books/<int:pk>', BookDetailView.as_view(), name='book_detail'),
     path('books_search', BooksSearchView.as_view(), name='search_books'),
+    path('stars', StarsView.as_view(), name='stars')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

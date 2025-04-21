@@ -118,7 +118,7 @@ class DjangoSession(models.Model):
 
 ########################### MY MODELS ######################################
 
-class Customer(AbstractUser):
+class Customer(models.Model):
     """Модель пользователя"""
     id = models.AutoField("ID", primary_key=True, unique=True)
     email = models.EmailField("E-mail", max_length=256)
@@ -217,19 +217,6 @@ class Order(models.Model):
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
 
-class OrderItem(models.Model):
-    id = models.AutoField("ID", primary_key=True)
-    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-    product = models.ForeignKey(Book, related_name='order_items', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return str(self.id)
-
-    def get_cost(self):
-        return self.price * self.quantity
-
 
 class CartItem(models.Model):
     """Модель товара корзины"""
@@ -244,8 +231,8 @@ class CartItem(models.Model):
         return f"Товар: {self.book.title}, {self.quantity} штук)"
 
 
-
-
-
-
-
+class Star(models.Model):
+    """Модель избранного"""
+    id = models.AutoField("ID", primary_key=True)
+    customer = models.ForeignKey(Customer, verbose_name="Покупатель", on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, verbose_name="Книга", on_delete=models.CASCADE)
