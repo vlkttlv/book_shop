@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книги</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <h1 class="book-style">Найденые книги:</h1>
+    {% if search_query %}
+    <h2>Вы искали: "{{ search_query }}"</h2>
+    {% endif %}
+
+    {% if stars %}
+    <table>
+        <tr>
+            <th>     </th>
+            <th class="book-style">Книга</th>
+            <th class="book-style">Автор</th>
+            <th class="book-style">Стоимость</th>
+        </tr>
+        {% for star in stars %}
+        <tr>
+            <td class="book-style"><img src="{{ star.book.img.url }}" alt="{{ star.book.id }}" height="200px"></td>
+            <td class="book-style">
+                <a href="{% url 'book_detail' star.book.id %}">{{star.book.title}}</a>
+            </td>
+            <td class="book-style">{{ star.book.author }}</td>
+            <td class="book-style">{{ star.book.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h2>Упс, ничего не найдено...</h2>
+    {% endif %}
+</body>
+</html>

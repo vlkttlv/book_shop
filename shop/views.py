@@ -45,6 +45,26 @@ class StarsView(ListView):
     context_object_name = "stars"
 
 
+class StarsSearchView(ListView):
+    template_name = "search_stars.html"
+    model = Star
+    context_object_name = "stars"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Star.objects.filter(
+            Q(book__title__icontains=query) |
+            Q(book__author__icontains=query)
+        ).order_by('book__title')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')
+        context['search_query'] = query
+        return context
+
+
 class BooksSearchView(ListView):
     template_name = "search_books.html"
     model = Book

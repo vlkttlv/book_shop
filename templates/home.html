@@ -9,6 +9,12 @@
 </head>
 <body>
     <h1>читай город 2.0</h1>
+    {% if user.is_authenticated %} 
+        <h1>Привет, {{ user.username }}!</h1> 
+    {% else %} 
+        <p>Вы не вошли на сайт</p> 
+        <a href="{% url 'login' %}">Войти</a> 
+    {% endif %}  
     <img src="{% static 'img/home.jpg' %}" alt="Django">
 </body>
 <script src="{% static 'js/script.js' %}"></script>
