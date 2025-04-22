@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
-from shop.models import Customer, Order, Book, Star
+from shop.models import CustomUser, Order, Book, Star
 
 
 class HomePageView(TemplateView):
@@ -11,7 +11,7 @@ class HomePageView(TemplateView):
 
 class CustomersListView(ListView):
     template_name = "customers.html"
-    model = Customer
+    model = CustomUser
     context_object_name = "list_of_all_customers"
 
 

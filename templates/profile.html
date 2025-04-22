@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль {{ user_profile.username }}</title>
+</head>
+<body style="book-style">
+    <h1>Ваш профиль</h1>
+    <div>
+        <h2><strong>Имя и фамилия пользователя:</strong>{{ user_profile.first_name }} {{ user_profile.last_name }}<br/></h2>
+        <h2><strong>Email:</strong>{{ user_profile.email }}</h2>
+    </div>
+    <hr>
+    <p>{{ user_profile.profile.bio|linebreaks }}</p>
+</body>
+</html>

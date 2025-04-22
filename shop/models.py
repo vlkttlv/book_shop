@@ -1,6 +1,4 @@
-from decimal import Decimal
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
 
 class AuthGroup(models.Model):
@@ -117,26 +115,47 @@ class DjangoSession(models.Model):
 
 
 ########################### MY MODELS ######################################
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.db import models
 
-class Customer(models.Model):
-    """Модель пользователя"""
-    id = models.AutoField("ID", primary_key=True, unique=True)
-    email = models.EmailField("E-mail", max_length=256)
-    hashed_password = models.CharField("Пароль", max_length=256)
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('Email обязателен')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if not extra_fields.get('is_staff'):
+            raise ValueError('Суперпользователь должен иметь is_staff=True')
+        if not extra_fields.get('is_superuser'):
+            raise ValueError('Суперпользователь должен иметь is_superuser=True')
+
+        return self.create_user(email, password, **extra_fields)
+
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
     first_name = models.CharField("Имя", max_length=256)
     last_name = models.CharField("Фамилия", max_length=256)
-    phone_number = models.CharField("Номер телефона", max_length=20)
-    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    phone_number = models.CharField("Номер телефона", max_length=20, default='1')
+    date_joined  = models.DateTimeField("Дата создания", auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
-    ROLE_CHOICES = (
-        ('user', 'Пользователь'),
-        ('admin', 'Администратор'),
-    )
+    objects = CustomUserManager()
 
-    role = models.CharField("Роль", max_length=20, choices=ROLE_CHOICES, default='user')
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number']
 
     def __str__(self):
-        return f'Пользователь: {self.first_name} {self.last_name}'
+        return self.email
 
 
 class Category(models.Model):
@@ -176,7 +195,7 @@ class Comment(models.Model):
     """Модель комментария"""
     id = models.AutoField("ID", primary_key=True)
     book = models.ForeignKey(Book, verbose_name="Книга", on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, verbose_name="Покупатель", on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomUser, verbose_name="Покупатель", on_delete=models.CASCADE)
     comment_date = models.DateField("Дата комментария", auto_now_add=True)
     comment = models.TextField("Комментарий")
 
@@ -187,7 +206,7 @@ class Comment(models.Model):
 class Address(models.Model):
     """Модель адреса"""
     id = models.AutoField("ID", unique=True, primary_key=True)
-    customer = models.ForeignKey(Customer, verbose_name="Покупатель", on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomUser, verbose_name="Покупатель", on_delete=models.CASCADE)
     country = models.CharField("Страна", max_length=32)
     state = models.CharField("Область", max_length=255, blank=True)
     city = models.CharField("Город", max_length=255)
@@ -202,7 +221,7 @@ class Address(models.Model):
 class Order(models.Model):
     """Модель заказа"""
     id = models.AutoField("ID", primary_key=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     order_date = models.DateTimeField("Дата создания заказа", auto_now_add=True)
     updated_at = models.DateTimeField("Дата обновления заказа", auto_now=True)
     total_cost = models.DecimalField("Стоимость заказа", max_digits=10, decimal_places=2)
@@ -221,7 +240,7 @@ class Order(models.Model):
 class CartItem(models.Model):
     """Модель товара корзины"""
     id = models.AutoField("ID", primary_key=True)
-    customer = models.ForeignKey(Customer, verbose_name="Покупатель", on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomUser, verbose_name="Покупатель", on_delete=models.CASCADE)
     book = models.ForeignKey(Book, verbose_name="Книга", on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField("Количество", default=1)
     price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
@@ -234,5 +253,5 @@ class CartItem(models.Model):
 class Star(models.Model):
     """Модель избранного"""
     id = models.AutoField("ID", primary_key=True)
-    customer = models.ForeignKey(Customer, verbose_name="Покупатель", on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomUser, verbose_name="Покупатель", on_delete=models.CASCADE)
     book = models.ForeignKey(Book, verbose_name="Книга", on_delete=models.CASCADE)

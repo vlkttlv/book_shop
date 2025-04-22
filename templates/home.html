@@ -10,7 +10,7 @@
 <body>
     <h1>читай город 2.0</h1>
     {% if user.is_authenticated %} 
-        <h1>Привет, {{ user.username }}!</h1> 
+        <h1>Привет, {{ user.first_name }} {{ user.last_name}}!</h1> 
     {% else %} 
         <p>Вы не вошли на сайт</p> 
         <a href="{% url 'login' %}">Войти</a> 

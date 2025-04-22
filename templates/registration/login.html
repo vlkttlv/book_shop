@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+      .form-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh; /* на всю высоту экрана */
+      }
+      .login-form {
+          background-color: #f9f9f9;
+          padding: 40px;
+          border-radius: 10px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+          width: 400px;
+          font-size: 18px;
+      }
+      .login-form input {
+          width: 100%;
+          padding: 10px;
+          margin-top: 8px;
+          margin-bottom: 20px;
+          font-size: 16px;
+      }
+      .login-form button {
+          width: 100%;
+          padding: 12px;
+          background-color: #2c7edc;
+          color: white;
+          border: none;
+          font-size: 18px;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+      .login-form button:hover {
+          background-color: #2c7edc;
+      }
+  </style>
+</head>
+<body class="book-style">
+  <div class="form-wrapper">
+    <form method="post" class="login-form"> 
+      {% csrf_token %} 
+      <label for="{{ form.username.id_for_label }}">Почта:</label><br>
+      {{ form.username }}<br>
+      <label for="{{ form.password.id_for_label }}">Пароль:</label><br>
+      {{ form.password }}<br>
+      <button type="submit">Войти</button> 
+    </form> 
+  </div>
+</body> 
