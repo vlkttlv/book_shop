@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from shop.models import CustomUser, Order, Book, Star
 
@@ -39,13 +40,16 @@ class BookDetailView(DetailView):
     context_object_name = "book"
 
     
-class StarsView(ListView):
+class StarsView(LoginRequiredMixin, ListView):
     template_name = "stars.html"
     model = Star
     context_object_name = "stars"
 
+    def get_queryset(self):
+        return Star.objects.filter(customer=self.request.user)
 
-class StarsSearchView(ListView):
+
+class StarsSearchView(LoginRequiredMixin, ListView):
     template_name = "search_stars.html"
     model = Star
     context_object_name = "stars"
@@ -53,8 +57,8 @@ class StarsSearchView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         return Star.objects.filter(
-            Q(book__title__icontains=query) |
-            Q(book__author__icontains=query)
+            Q(customer=self.request.user, book__title__icontains=query) |
+            Q(customer=self.request.user, book__author__icontains=query)
         ).order_by('book__title')
 
 
