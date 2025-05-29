@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav style="background-color: #f0f0f0; padding: 10px;">
+        <a href="{% url 'shop:home' %}" style="margin-right: 20px;">Главная</a>
+        <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
+        <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
+        <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:stars' %}">Избранное </a>
+    </nav>
+    {% block content %}
+    <div class="cart">
+        {% with total_items=cart|length %}
+        {% if cart|length > 0 %}
+        <h1>Ваша корзина:
+        <a href="{% url "cart:cart_detail" %}">
+        Итого количество: {{ total_items }}; сумма -
+        {{ cart.get_total_price }} рублей
+        </a>
+        </h1>
+        {% else %}
+        <h1>Корзина пустая.</h1>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <table class=""cart>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Книга</th>
+                <th>Количество</th>
+                <th></th>
+                <th>Цена за штуку</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            {% with product=item.book %}    
+            <tr>
+                <td><img class="productImage" style="height: 200px" src="
+                    {{ product.img.url }}"></td>
+                <td>{{ product.title }}</td>
+                <td>
+                    <form action="{% url "cart:add" product.id%}"
+                    method="post">
+                    {{ item.update_quantity_form.quantity }}
+                    {{ item.update_quantity_form.override }}
+                    <input type="number" name="quantity" value="{{ item.quantity }}"
+                    min="1" max="10" style="margin-left: 10px; width: 50px">
+                    <input type="hidden" name="update" value="true" style="margin-left:
+                    10px">
+                    <input type="submit" value="Обновить">
+                    {% csrf_token %}
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url "cart:remove" product.id%}"
+                    method="post">
+                    <input type="submit" value="Удалить">
+                    {% csrf_token %}
+                    </form>
+                </td>
+                <td>{{ product.price }} руб.</td>
+                <td>{{ item.total_price }} руб.</td>
+                <!-- <td style="font-weight: bold">{{ cart.get_total_price }} руб.</td> -->
+            </tr>
+            {% endwith %}
+            {% endfor %}
+            <tr class="total">
+                <td class colspan="5"> итого </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url "shop:books" %}" class="button-light">Продолжить
+        покупки</a>
+        <a href="/">Вернуться на главную</a>
+        </p>
+    {% endblock %}
+</body>
+</html>

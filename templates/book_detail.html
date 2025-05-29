@@ -8,9 +8,21 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
+    <nav style="background-color: #f0f0f0; padding: 10px;">
+        <a href="{% url 'shop:home' %}" style="margin-right: 20px;">Главная</a>
+        <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
+        <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
+        <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:stars' %}">Избранное </a>
+    </nav>
     <h1 class="book-style">{{ book.title }}</h1>
     <h2 class="book-style" style="background-color: #8dc2ff;">{{ book.author }}</h2>
     <img src="{{ book.img.url }}" alt="{{ book.title }}" height="400px">
     <h3 class="book-style" style="background-color: #8dc2ff;">Цена: {{ book.price }}</h3>
+    <form action="{% url 'cart:add' book.id %}" method="post">
+        {% csrf_token %}
+        {{ cart_product_form.quantity }}
+        <button type="submit">Добавить в корзину</button>
+    </form>
 </body>
 </html>

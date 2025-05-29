@@ -8,7 +8,14 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
-    <form action="{% url 'search_stars' %}" method="GET"> 
+    <nav style="background-color: #f0f0f0; padding: 10px;">
+        <a href="{% url 'shop:home' %}" style="margin-right: 20px;">Главная</a>
+        <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
+        <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
+        <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:stars' %}">Избранное </a>
+    </nav>
+    <form action="{% url 'shop:search_stars' %}" method="GET"> 
         <input name="q" type="text" placeholder="Введите название книги или автора..."> 
     </form> 
     <h1 class="book-style">Избранное</h1>
@@ -23,7 +30,7 @@
         <tr>
             <td class="book-style"><img src="{{ star.book.img.url }}" alt="{{ star.book.id }}" height="200px"></td>
             <td class="book-style">
-                <a href="{% url 'book_detail' star.book.id %}">{{star.book.title}}</a>
+                <a href="{% url 'shop:book_detail' star.book.id %}">{{star.book.title}}</a>
             </td>
             <td class="book-style">{{ star.book.author }}</td>
             <td class="book-style">{{ star.book.price }}</td>

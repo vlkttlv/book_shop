@@ -3,6 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from cart.forms import CartAddProductForm
 from shop.models import CustomUser, Order, Book, Star
 
 
@@ -38,6 +39,11 @@ class BookDetailView(DetailView):
     template_name = "book_detail.html"
     model = Book
     context_object_name = "book"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart_product_form'] = CartAddProductForm()
+        return context
 
     
 class StarsView(LoginRequiredMixin, ListView):

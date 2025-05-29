@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    <nav style="background-color: #f0f0f0; padding: 10px;">
+        <a href="{% url 'shop:home' %}" style="margin-right: 20px;">Главная</a>
+        <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
+        <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
+        <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:stars' %}">Избранное </a>
+    </nav>
     <h1>читай город 2.0</h1>
     {% if user.is_authenticated %} 
         <h1>Привет, {{ user.first_name }} {{ user.last_name}}!</h1> 

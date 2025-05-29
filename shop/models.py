@@ -119,6 +119,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.db import models
 
 class CustomUserManager(BaseUserManager):
+    """Класс для управления создания пользователе"""
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Email обязателен')

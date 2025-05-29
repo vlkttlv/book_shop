@@ -5,10 +5,28 @@
     <title>Профиль {{ user_profile.username }}</title>
 </head>
 <body style="book-style">
+    <nav style="background-color: #f0f0f0; padding: 10px;">
+        <a href="{% url 'shop:home' %}" style="margin-right: 20px;">Главная</a>
+        <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
+        <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
+        <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:stars' %}">Избранное </a>
+    </nav>
     <h1>Ваш профиль</h1>
     <div>
-        <h2><strong>Имя и фамилия пользователя:</strong>{{ user_profile.first_name }} {{ user_profile.last_name }}<br/></h2>
-        <h2><strong>Email:</strong>{{ user_profile.email }}</h2>
+        <h2>
+            Имя: {{ user_profile.first_name }}
+        </h2>
+        <h2>
+            Фамилия: {{ user_profile.last_name }}
+        </h2>
+        <h2>
+            Email: {{ user_profile.email }}
+        </h2>
+        <h2>
+            Номер телефона: {{ user_profile.phone_number}}
+        </h2>
+
     </div>
     <hr>
     <p>{{ user_profile.profile.bio|linebreaks }}</p>

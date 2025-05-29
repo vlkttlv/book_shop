@@ -46,6 +46,7 @@
 <body class="book-style">
   <div class="form-wrapper">
     <form method="post" class="login-form"> 
+      <h2>Авторизация</h2> 
       {% csrf_token %} 
       <label for="{{ form.username.id_for_label }}">Почта:</label><br>
       {{ form.username }}<br>
