@@ -13,6 +13,7 @@
         <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
         <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
         <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:orders' %}" style="margin-right: 20px;">Заказы</a>
         <a href="{% url 'shop:stars' %}">Избранное </a>
     </nav>
     <h1 class="book-style">Найденые книги:</h1>
@@ -27,6 +28,7 @@
             <th class="book-style">Книга</th>
             <th class="book-style">Автор</th>
             <th class="book-style">Стоимость</th>
+            <th></th>
         </tr>
         {% for book in list_of_all_books %}
         <tr>
@@ -36,6 +38,13 @@
             </td>
             <td class="book-style">{{ book.author }}</td>
             <td class="book-style">{{ book.price }}</td>
+            <td>
+                <form action="{% url 'cart:add' book.id %}" method="post">
+                    {% csrf_token %}
+                    {{ cart_product_form.quantity }}
+                    <button type="submit">Добавить в корзину</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>

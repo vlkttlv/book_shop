@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>Document</title>
 </head>
 <body>
@@ -11,6 +13,7 @@
         <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
         <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
         <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:orders' %}" style="margin-right: 20px;">Заказы</a>
         <a href="{% url 'shop:stars' %}">Избранное </a>
     </nav>
     {% block content %}
@@ -18,10 +21,9 @@
         {% with total_items=cart|length %}
         {% if cart|length > 0 %}
         <h1>Ваша корзина:
-        <a href="{% url "cart:cart_detail" %}">
-        Итого количество: {{ total_items }}; сумма -
-        {{ cart.get_total_price }} рублей
-        </a>
+            <a href="{% url 'cart:cart_detail' %}">
+                Итого количество: {{ total_items }}; сумма - {{ cart.get_total_price }} рублей
+            </a>
         </h1>
         {% else %}
         <h1>Корзина пустая.</h1>
@@ -34,9 +36,9 @@
                 <th></th>
                 <th>Книга</th>
                 <th>Количество</th>
-                <th></th>
                 <th>Цена за штуку</th>
                 <th>Сумма</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -45,10 +47,9 @@
             <tr>
                 <td><img class="productImage" style="height: 200px" src="
                     {{ product.img.url }}"></td>
-                <td>{{ product.title }}</td>
+                <td>{{ product.title }} - {{ product.author }}</td>
                 <td>
-                    <form action="{% url "cart:add" product.id%}"
-                    method="post">
+                    <form action="{% url 'cart:add' product.id %}" method="post">
                     {{ item.update_quantity_form.quantity }}
                     {{ item.update_quantity_form.override }}
                     <input type="number" name="quantity" value="{{ item.quantity }}"
@@ -59,29 +60,24 @@
                     {% csrf_token %}
                     </form>
                 </td>
+                <td>{{ product.price }} руб.</td>
+                <td>{{ item.total_price }} руб.</td>
                 <td>
-                    <form action="{% url "cart:remove" product.id%}"
-                    method="post">
+                    <form action="{% url 'cart:remove' item.book.id%}" method="post">
                     <input type="submit" value="Удалить">
                     {% csrf_token %}
                     </form>
                 </td>
-                <td>{{ product.price }} руб.</td>
-                <td>{{ item.total_price }} руб.</td>
-                <!-- <td style="font-weight: bold">{{ cart.get_total_price }} руб.</td> -->
             </tr>
             {% endwith %}
             {% endfor %}
-            <tr class="total">
-                <td class colspan="5"> итого </td>
-            </tr>
         </tbody>
     </table>
     <p class="text-right">
-        <a href="{% url "shop:books" %}" class="button-light">Продолжить
-        покупки</a>
-        <a href="/">Вернуться на главную</a>
-        </p>
+        <a href="{% url 'shop:books' %}" class="button-light">Продолжить покупки</a><br>
+        <a href="/">Вернуться на главную</a><br>
+        <a href="{% url 'orders:order_create' %}">Оформить заказ</a>
+    </p>
     {% endblock %}
 </body>
 </html>

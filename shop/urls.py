@@ -13,7 +13,7 @@ from .views import (BooksSearchView,
 app_name = 'shop'
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
-    path('customers', CustomersListView.as_view(), name='orders'),
+    path('customers', CustomersListView.as_view(), name='customers'),
     path('orders', OrdersListView.as_view(), name='orders'),
     path('orders/<int:pk>', OrderDetailView.as_view(), name='order_detail'),
     path('books', BooksListView.as_view(), name='books'),

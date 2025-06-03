@@ -13,17 +13,15 @@
         <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
         <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
         <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:orders' %}" style="margin-right: 20px;">Заказы</a>
         <a href="{% url 'shop:stars' %}">Избранное </a>
     </nav>
-    <form action="{% url 'search' %}" method="GET"> 
-        {% csrf_token %} 
-        <input name="q" type="text" placeholder="Введите имя или фамилию..."> 
-    </form>
     <h1>Список всех заказов:</h1>
     <table>
         <tr>
             <th>Номер заказа</th>
-            <th>Имя покупателя</th>
+            <th>Заказ создан</th>
+            <th>Имя получателя</th>
             <th>Статус заказа</th>
             <th>Сумма заказа</th>
             <th>Дата создания заказа</th>
@@ -33,8 +31,9 @@
             <td>
                 <a href="{% url 'shop:order_detail' order.id %}">{{order.id}}</a>
             </td>
-            <td>{{ order.customer }}</td>
-            <td>{{ order.address }}</td>
+            <td>{{ order.created_by.first_name }} {{ order.created_by.last_name }}</td>
+            <td>{{ order.first_name }} {{ order.last_name }}</td>
+            <td>{{ order.order_status }}</td>
             <td>{{ order.total_cost }}</td>
             <td>{{ order.order_date|date:"d-m-Y"}}</td>
         </tr>

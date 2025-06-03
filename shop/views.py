@@ -21,6 +21,9 @@ class OrdersListView(ListView):
     template_name = "orders.html"
     model = Order
     context_object_name = "list_of_all_orders"
+    def get_queryset(self):
+        return Order.objects.filter(created_by=self.request.user)
+
 
 
 class OrderDetailView(DetailView):

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav style="background-color: #f0f0f0; padding: 10px;">
+        <a href="{% url 'shop:home' %}" style="margin-right: 20px;">Главная</a>
+        <a href="{% url 'shop:books' %}" style="margin-right: 20px;">Поиск</a>
+        <a href="{% url 'accounts:profile' %}" style="margin-right: 20px;">Профиль</a>
+        <a href="{% url 'cart:cart_detail' %}" style="margin-right: 20px;">Корзина</a>
+        <a href="{% url 'shop:orders' %}" style="margin-right: 20px;">Заказы</a>
+        <a href="{% url 'shop:stars' %}">Избранное </a>
+    </nav>
+    {% block content %}
+        <h1>Заказ:</h1>
+        <div class="order-info">
+        <h3>Ваш заказ</h3>
+        <ul>
+            {% for item in cart %}
+            <li> {{ item.quantity }} шт. x {{ item.product.product_name }} на
+                сумму <span> {{ item.total_price }} руб.</span> </li>
+                {% endfor %}
+        </ul>
+        <p>Всего: {{ cart.get_total_price }} руб.</p>
+        </div>
+                <form method="post" class="order-form">
+                {{ form.as_p }}
+                <p><input type="submit" value="Заказать"></p>
+                {% csrf_token %}
+                </form>
+                {% endblock %}
+                <a href="/">Вернуться на главную</a>
+                </body>
+                </html>

@@ -204,38 +204,51 @@ class Comment(models.Model):
         return f'Комментарий {self.customer} (ID {self.id})'
 
 
-class Address(models.Model):
-    """Модель адреса"""
-    id = models.AutoField("ID", unique=True, primary_key=True)
-    customer = models.ForeignKey(CustomUser, verbose_name="Покупатель", on_delete=models.CASCADE)
-    country = models.CharField("Страна", max_length=32)
-    state = models.CharField("Область", max_length=255, blank=True)
-    city = models.CharField("Город", max_length=255)
-    street = models.CharField("Улица", max_length=255)
-    home = models.CharField("Дом", max_length=10)
-    zip_code = models.CharField("Почтовый индекс", max_length=16)
-
-    def __str__(self):
-        return f"Адрес: {self.street}, {self.city} {self.home}, {self.country}"
-
-
 class Order(models.Model):
     """Модель заказа"""
     id = models.AutoField("ID", primary_key=True)
-    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    first_name = models.CharField("Имя", max_length=50, blank=False)
+    last_name = models.CharField("Фамилия", max_length=50, blank=False)
+    country = models.CharField("Страна", max_length=32, blank=False)
+    state = models.CharField("Область", max_length=255, blank=False)
+    city = models.CharField("Город", max_length=255, blank=False)
+    street = models.CharField("Улица", max_length=255, blank=False)
+    home = models.CharField("Дом", max_length=10, blank=False)
     order_date = models.DateTimeField("Дата создания заказа", auto_now_add=True)
     updated_at = models.DateTimeField("Дата обновления заказа", auto_now=True)
     total_cost = models.DecimalField("Стоимость заказа", max_digits=10, decimal_places=2)
     order_status = models.BooleanField(default=False)
-    payment_method = models.CharField("Способ оплаты", max_length=20)
+
+    PAY_METHOD = (
+        ('card', 'Картой при получении'),
+        ('money', 'Наличыми при получении')
+    )
+
+    payment_method = models.CharField("Способ оплаты", max_length=20, choices=PAY_METHOD)
     is_delivered = models.BooleanField("Доставлен?", default=False)
     address = models.CharField("Адрес доставки", max_length=255)
 
     def __str__(self):
-        return f"Заказ: {self.id} (ID покупателя {self.customer.id})"
+        return f"Заказ: {self.id} (ID покупателя {self.created_by.id})"
     
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
+
+
+class OrderItem(models.Model):
+    id = models.AutoField("ID", primary_key=True)
+    customer = models.ForeignKey(CustomUser, verbose_name="Покупатель", on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, verbose_name="Книга", on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField("Количество", default=1)
+    price = models.DecimalField(max_digits=50, decimal_places=2, default=0, blank=True)
+    order = models.ForeignKey(Order, related_name='items', verbose_name="Заказ", on_delete=models.SET_NULL, null=True, blank=True) # on_delete=models.SET_NULL означает, что если заказ будет удален, ссылка в элементе корзины станет NULL,
+
+    def __str__(self):
+        return f"Товар: {self.book.title}, {self.quantity} штук)"
+    
+    def get_total_cost(self):
+        return self.price * self.quantity
 
 
 class CartItem(models.Model):
